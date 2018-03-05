@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<h2>0. Acknowledgement and Thanks</h2>
+<p>This assignment, as well as most of the others in this course, are derived from assignments used by Prof. Warren Carithiers and former instructor Srinivas Sridharan.&nbsp; Thanks Warren and Srini.</p>
+<h2>1. Introduction</h2>
+<p>For 3D programming assignments this semester, we will be using OpenGL and GLSL&nbsp; as the platform for rendering scenes. The first task is to ensure that you have OpenGL set up for your particular development environment.</p>
+<p>A simple and basic OpenGL program is supplied with the assignment. Your task is to compile and run the application on whatever programming system that you plan on using to do your development for the remainder of the course If all is well, the application should produce a window with a special message.</p>
+<p><em>Important note:</em> We <strong>strongly</strong> suggest that you spend the time to complete it on whatever system you will be using for future OpenGL assignments,&nbsp; Completing this assignment will help you ensure that you will be able to compile and execute a working OpenGL program; taking the time to do this now means that you won't have to spend time debugging your OpenGL installation on later assignments!</p>
+<h2>2. Programming Environment</h2>
+<p>For all lab assignments this semester, we will be providing you with a programming framework to which you will add your solution. This framework will be slightly different for each assignment, so you should be sure to use the correct version for the assignment you are completing. This document describes the Python version</p>
+<p>For this assignment, the framework includes the following:</p>
+<ul>
+<li>
+<p><code>ShaderSetup</code> - a support module that reads, compiles, and links GLSL shader programs.</p>
+</li>
+<li>
+<p><code>shader.vert, shader.frag</code> - a simple GLSL vertex shader.</p>
+</li>
+<li>
+<p><code>alt.vert, alt.frag</code> - a simple GLSL fragment shader.</p>
+</li>
+<li>
+<p><code>helloOpenGL</code> - the main function for the application.</p>
+</li>
+</ul>
+<p>This program will accept both keyboard input (characters '1', '2', and 'q') and mouse left-button clicks. Experiment with them to see how the program reacts; this behavior is similar to what the frameworks for many of the later assignments will do.</p>
+<p>The driver program (<code>helloOpenGL</code>) will determine whether or not your OpenGL implementation supports OpenGL 3.2 and GLSL 1.50. (Note: some of the things you'll be doing in your shader programs later in the course will require GLSL 1.50, so this "workaround" may not be usable in those assignments!).&nbsp; Please contact the instructor ASAP if the shaders do not compile on your system.</p>
+<h2>3. Routines to Implement</h2>
+<p>You will not be implementing any code of your own for this assignment; all you must do is get the supplied program working.</p>
+<h2>4. Supplied Files</h2>
+<p>The programming framework for this assignment is available as a ZIP archive. You can find the lab0-for-python-updated.zip file in the Assignment Material section of CONTENT.&nbsp; It also can be accessed by clicking <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5410595" target="_self">here</a>.</p>
+<p>The framework ZIP archive contains a folder named <span style="font-family: courier new,courier,sans-serif; font-size: 10pt;">python</span> which contain the source code for this assignment.</p>
+<h2>5. What to submit</h2>
+<p>No need to submit anything.&nbsp; Just be sure that the sample program does run on your development machine.</p>
+<h2>6. Notes</h2>
+<h3>6.1. Installing Libraries</h3>
+<p>If you are doing this (and subsequent) assignments on your own system, you will need to be sure you have a recent OpenGL version, as some of the later work in the course will require at least OpenGL 3.2 and GLSL 1.50. For Python, we will be using GLUT for windowing and user input which is distributed with the Python version of OpenGL.</p>
+<p>The Python bindings for OpenGL is called PyOpenGL. The instructions for downloading and installing this package can be found at <a href="http://pyopengl.sourceforge.net/" target="_blank" rel="noopener noreferrer">http://pyopengl.sourceforge.net/.</a></p>
+<p>The assignments also make use of the numpy package which should already be installed on your machine for the 2D assignments.</p>
+<h3>6.2. Shader Files</h3>
+<p>All of the programming assignments for this course make use of OpenGL shader files. These files have <code>.vert</code> and <code>.frag</code> extensions.</p>
+<p>The assignments are set up assuming that these files are in the same folder as the executable.</p>
+</body>
+</html>

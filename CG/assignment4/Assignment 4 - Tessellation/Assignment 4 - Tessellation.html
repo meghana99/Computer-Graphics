@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<h2>1.0 Introduction</h2>
+<p>In this assignment, you will gain an understanding of what happens behind the scenes when you create objects whose surfaces are not simple polygons. Computer graphics hardware devices are typically optimized to handle triangles. The process of dividing a surface into a series of triangles is called <em>tessellation</em>.</p>
+<p>In this assignment you will be responsible for creating tessellations of four basic shapes: a cube, a cylinder, a cone, and a sphere. Here are examples of tessellated versions of these shapes:</p>
+<p><img src="cube-sm.png" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" />&nbsp;&nbsp;&nbsp;&nbsp; <img src="cylinder.png" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></p>
+<p><img src="cone.png" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /> &nbsp;&nbsp;&nbsp; <img src="sphere.png" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></p>
+<p>(In this image, the sphere has been implemented using the latitude/longitude method described in class.) In addition, your solution will be an interactive one; you will vary the tessellation of the objects' surfaces in response to user input.</p>
+<h2>2.0 Programming Environment</h2>
+<p>As with the previous assignments, a programming environment is supplied for you. This environment uses OpenGL, GLFW, and GLEW (C and C++)&nbsp; and OpenGL and GLUT (for Python).&nbsp; You are free to use any of these implementations. The environment includes the following:</p>
+<ul>
+<li>
+<p><code>Buffers / bufferSet</code> - a support module providing OpenGL vertex and element buffer support.</p>
+</li>
+<li>
+<p><code>Canvas / SimpleShape</code> - a support module that provides functions for manipulating the shape being defined.</p>
+</li>
+<li>
+<p><code>ShaderSetup</code> - a support module that reads, compiles, and links GLSL shader programs.</p>
+</li>
+<li>
+<p><code>Shapes</code> / <span style="font-size: 10pt;"><strong><span style="font-family: courier new,courier,sans-serif;">cgShape</span></strong></span> - a support module that will contain tessellation code for the four shapes.</p>
+</li>
+<li>
+<p><code>Vertex</code> - a module that describes the structure of a vertex (C/C++ only).</p>
+</li>
+<li>
+<p><code>tessMain</code> - the main function for the application.</p>
+</li>
+<li>
+<p><code>shader.vert, shader.frag</code> - simple GLSL 1.50 shaders</p>
+</li>
+</ul>
+<p>The C version includes a module named <code>FloatVector</code> which provides an extensible vector holding floating-point values. Both versions include a file named <code>header.mak</code> for use with the <code>gmakemake</code> program on our systems to create a <code>Makefile</code> to simplify compilation and linking of the program.</p>
+<p>See the <em>Supplied Files</em> section (below) for details on how to download the framework.</p>
+<p>The template program is interactive; it accepts keyboard input to control the display. The following keys can be used to operate the program:</p>
+<table border="1">
+<tbody>
+<tr>
+<th>Key(s)</th>
+<th>Function</th>
+</tr>
+<tr>
+<td>a, A</td>
+<td>Rotate the current shape around the x-axis, y-axis, and z-axis in sequence (C/C++ version only)</td>
+</tr>
+<tr>
+<td>x, y, z</td>
+<td>Rotate the current shape forward about the x, y, or z axis</td>
+</tr>
+<tr>
+<td>X, Y, Z</td>
+<td>Rotate the current shape backward about the x, y, or z axis</td>
+</tr>
+<tr>
+<td>1, c</td>
+<td>Select the cube as the current shape (using current tessellation settings)</td>
+</tr>
+<tr>
+<td>2, C</td>
+<td>Select the cylinder as the current shape (using current tessellation settings)</td>
+</tr>
+<tr>
+<td>3, n</td>
+<td>Select the cone as the current shape (using current tessellation settings)</td>
+</tr>
+<tr>
+<td>4, s</td>
+<td>Select the sphere as the current shape (using current tessellation settings)</td>
+</tr>
+<tr>
+<td>+, -</td>
+<td>Increment/decrement the primary subdivision of the current shape by 1</td>
+</tr>
+<tr>
+<td>=, _</td>
+<td>Increment/decrement the secondary subdivision of the current shape by 1</td>
+</tr>
+<tr>
+<td>r, R</td>
+<td>Reset the figure to its original orientation</td>
+</tr>
+<tr>
+<td>q, Q</td>
+<td>Quit the application</td>
+</tr>
+</tbody>
+</table>
+<h2>3.0 Routines to implement</h2>
+<p>You must edit the <code>Shapes / cgShape</code> module and supply implementations for four functions: <code>makeCube()</code>, <code>makeCylinder()</code>, <code>makeCone()</code>, and <code>makeSphere()</code>. Pay close attention to the comments included in this file, as they explain what each function should do. For each triangle in the tessellation you must call <code>addTriangle()</code> to ensure that its vertices are included in the list for drawing.</p>
+<p>For the sphere, the <code>makeSphere()</code> function is set up to accept the radius of the sphere and two tessellation factors (number of slices and number of stacks) as parameters. This implies that the sphere should be implemented using the latitude/longitude method. If you wish to implement the recursive subdivision method, you will use only the first tessellation factor; the second factor should be ignored.</p>
+<p>All of the prototypes for the <code>make*()</code> functions begin with code that forces a known lower bound on the tessellation factor. This is particularly important for the "disc" portion of the cylinder and cone, and for both factors for the sphere, because otherwise you'll get a really strange-looking shape.</p>
+<p>CAUTION: For all shapes, calls to <code>addTriangle()</code> <em>must</em> list vertices in counter-clockwise order. OpenGL treats polygons with vertices listed in this order as front-facing. Failure to do this will cause your shapes to appear inside-out. (You can tell if you have made this mistake by watching the figure as you rotate it; if any of the triangles are backwards, they will disappear from the figure as you rotate it around to look at them.)</p>
+<h2>4.0 Supplied Files</h2>
+<p>The programming framework for this assignment is available as a ZIP archive. You can either download the <code>lab4-updated.zip</code> archive directly <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5410596" target="_self">here</a> or retrieve it from the CONTENT-&gt;Assignment Material area of mycourses.</p>
+<p>The ZIP archive contains a folder named <code>lab4</code>; under that are subfolders <code>c</code>, <code>c++</code>, and <span style="font-size: 10pt;"><strong><span style="font-family: courier new,courier,sans-serif;">python </span></strong></span>which contain the obvious things, along with a subfolder named <code>misc</code>, which contains a shellscript named <code>compmac</code>. In the C and C++ folders you'll find a file named <code>header.mak</code>, for use on the CS systems to help you generate a <code>Makefile</code> that will compile and link your program with the libraries used by the framework. See the contents of <code>header.mak</code> for details on how to do this.</p>
+<h2>5.0 What to submit</h2>
+<p>Submit your modified <code>Shapes</code> or <span style="font-family: courier new,courier,sans-serif; font-size: 10pt;">cgShape</span> module and any auxiliary files (e.g., supporting classes) you have created.</p>
+<p>If you are working in C, your implementation must be in a file named <code>Shapes.c</code>; if your implementation requires making changes to the <code>Shapes.h</code> file (e.g., you have added function prototypes or other things to the header file), you should submit that file along with <code>Shapes.c</code>. If you make changes to the <code>header.mak</code> file, you may submit your modified version as well.</p>
+<p>If you are working in C++, your implementation must be in a file named <code>Shapes.cpp</code>; if your implementation requires making changes to the <code>Shapes.h</code> file (e.g., you have added data members or member functions to the class declaration), you should submit that file along with <code>Shapes.cpp</code>. If you make changes to the <code>header.mak</code> file, you may submit your modified file as well.</p>
+<p>If working in Python, your implementation must be in the file <span style="font-family: courier new,courier,sans-serif; font-size: 10pt;">cgShape.py</span></p>
+<p>You may optionally submit a modified <code>header.mak</code> file and/or a modified <code>Shapes.h</code> file. The modified <code>header.mak</code> should be based on the version found in the ZIP archive, or the <code>header.mak.glsl</code> file found in the CG course pub directory.</p>
+<p>The minimum acceptance test is that your code must be complete - that is, it must compile and link cleanly when submitted. Submissions <em>will not be accepted</em> if they fail to compile and link cleanly. (Warning messages from the compiler are acceptable, but not fatal errors.)</p>
+<p>Please place your submitted files to the Dropbox labeled <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=dropbox&amp;rcode=rochester-5410199" target="_self">Assignment 4 - Tessellation</a></p>
+<h2>6.0 Grading</h2>
+<p>This assignment is worth 50 points, distributed as follows:</p>
+<ul>
+<li>
+<p><em>Proper tessellation</em>: 10 points per shape<br /> The shapes look correct; there are no extra or missing triangles; the shape does not look inside-out (i.e., correct faces are drawn).</p>
+</li>
+<li>
+<p><em>Handles parameters</em>: 2 points<br /> Changing the parameters correctly changes the degree of tessellation.</p>
+</li>
+<li>
+<p><em>Stability and efficiency</em>: 2 points<br /> The program does not crash or have memory leaks; for these simple shapes, increasing the degree of tessellation does not result in overly sluggish performance.</p>
+</li>
+<li>
+<p><em>Documentation and style</em>: 6 points<br /> Self-explanatory.</p>
+</li>
+</ul>
+<h2>7.0 Notes</h2>
+<p>You are encouraged to discuss the tessellation algorithms with other students in the class. However, <em>you must write your own code</em>. Please <strong>do not use code obtained from the web</strong>. There are only a few websites with code solutions to these types of problems; it will be obvious if you use this code.</p>
+<p>The <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5410200" target="_self">lecture notes presented in class</a> should help you to get started on this assignment.</p>
+<p>The cube, cylinder, and cone should all be one unit wide (e.g., for the cube, the faces are all at offsets of 0.5 in the appropriate direction; for the cylinder, the disks have radius 0.5 and are 0.5 units from the origin along the <em>y</em> axis; etc.), and each should be centered at the origin.</p>
+<p>The sphere should also be centered at the origin and should have a diameter of one unit. If you are implementing the recursive subdivision method, remember that the vertex positions for the icosahedron in the lecture notes are for an icosahedron of <em>radius</em> one (i.e., <em>diameter</em> two). As a result, unless you normalize the vertices and scale by 0.5, the icosahedron will appear distorted because of the position of the camera.</p>
+<p>The primary and secondary subdivision numbers are used as follows:</p>
+<ul>
+<li>
+<p>For the cube, only the primary subdivision value is used, and all faces are subdivided identically. The minimum value of this factor should be one.</p>
+</li>
+<li>
+<p>For the cone and cylinder, the primary subdivision controls the number of sides on the figure (i.e., the subdivision of the disks), and the secondary subdivision controls the height. The minimum number of sides should be three (i.e., if a value less than three is given for the primary subdivision, use three instead), and the minimum height factor should be one.</p>
+</li>
+<li>
+<p>If you are implementing the recursive subdivision version of the sphere, only the primary subdivision value is used. The minimum value of this should be one; for efficiency reasons, you should also set a maximum value of five for this parameter.</p>
+</li>
+<li>
+<p>If you are implementing the latitude/longitude version of the sphere, the primary subdivision should control the number of slices per disk (the theta direction) and the secondary subdivision should control the number of stacked disks (the phi direction). The minimum values of each of these should be three.</p>
+</li>
+</ul>
+<p>The <code>Shapes / cgShape</code> files in the framework are all set up to use the bounds described above for the tessellation factors. (For the sphere, the bounds are set for the latitude/longitude version; you will need to modify them if you are using recursive subdivision.)</p>
+<p>The <code>shader.vert</code> and <code>shader.frag</code> files supplied with the framework require GLSL version 1.50, which is only available with OpenGL 3.2 or newer. If you are attempting to develop your code on a system which doesn't have a new-enough version of GLSL, you'll get error messages when these files are compiled during the execution of your code. The C/C++ driver program will automatically "fall back" to the alternate shaders if GLSL 1.50 isn't available.&nbsp; If you are having trouble with this in Python, please consult with the instructor.</p>
+<p></p>
+<hr />
+</body>
+</html>

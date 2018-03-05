@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<h2>1. Introduction</h2>
+<p>In this assignment, you will work with OpenGL and GLSL to implement lighting, materials, shading, and texture mapping. You will be producing Phong-shaded and texture-mapped shapes using the Phong Illumination Model.</p>
+<p>Recall that the Phong illumination model contains three components describing how light reflects off an object:</p>
+<blockquote>
+<table border="0">
+<tbody>
+<tr>
+<td><em>Ambient</em></td>
+<td>&nbsp;</td>
+<td>Reflection due to "background" light</td>
+</tr>
+<tr>
+<td><em>Diffuse</em></td>
+<td>&nbsp;</td>
+<td>Equal reflection of light from a light source in all directions</td>
+</tr>
+<tr>
+<td><em>Specular</em></td>
+<td>&nbsp;</td>
+<td>"Mirror-like" reflection of light from a light source</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>Also recall that basic texture mapping involves using data from a texture image in place of the basic material properties of the object. This "color" is then used in place of the <em>O<sub>d</sub></em> (etc.) values in the Phong equations.</p>
+<p>As in all the assignments this term, this framework uses OpenGL, GLFW, and GLEW for C/C++ and GLUT for python; if you have completed those assignments successfully on your own system, you have working versions of these libraries and you should be ready to go on this assignment. Because this assignment requires the use of features of GLSL 1.50, you will need at least OpenGL 3.2 to complete it. (This is particularly important when doing normal vector transformations; see the <em>Notes</em> section, below, for more information.)</p>
+<p>The framework we are providing for you contains two sets of basic shader files (vertex and fragment shaders) for Phong shading and texture mapping. Your task is to modify the shaders to produce the required shading effect.</p>
+<p>The scene you will be rendering consists of a teapot and a quad, illuminated by a single point light and some ambient light. The material and lighting parameters are as follows (colors are specified using RGBA notation; positions are given using homogeneous coordinates):</p>
+<ul>
+<li>
+<p>Material properties of the teapot:</p>
+<ul>
+<li>Ambient material color = ( 0.5, 0.1, 0.9, 1.0 )</li>
+<li>Diffuse material color = ( 0.89, 0.0, 0.0, 1.0 )</li>
+<li>Specular material color = ( 1.0, 1.0, 1.0, 1.0 )</li>
+</ul>
+</li>
+<li>
+<p>Reflective characteristics of the teapot and the quad:</p>
+<ul>
+<li>Ambient reflection coefficient (ka) = 0.5</li>
+<li>Diffuse reflection coefficient (kd) = 0.7</li>
+<li>Specular reflection coefficient (ks) = 1.0</li>
+<li>Specular exponent = 10.0</li>
+</ul>
+</li>
+<li>
+<p>Properties of the light source:</p>
+<ul>
+<li>Color = ( 1.0, 1.0, 0.0, 1.0 )</li>
+<li>Position = ( 0.0, 5.0, 2.0, 1.0 )</li>
+</ul>
+</li>
+<li>
+<p>Ambient light in the scene:</p>
+<ul>
+<li>Color = ( 0.5, 0.5, 0.5, 1.0 )</li>
+</ul>
+</li>
+</ul>
+<p>The placement of the objects and the camera are provided for you. The camera uses a frustum projection.</p>
+<p>The program accepts keyboard input as follows:</p>
+<blockquote>
+<table cellpadding="2" border="1">
+<tbody>
+<tr>
+<td align="center">a</td>
+<td>Start animation</td>
+</tr>
+<tr>
+<td align="center">r</td>
+<td>Reset animation rotation</td>
+</tr>
+<tr>
+<td align="center">s</td>
+<td>Stop animation</td>
+</tr>
+<tr>
+<td align="center">q, Q</td>
+<td>Exit from the program</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>With no modification, the framework produces images of a quad and a teapot in white. Here are examples of the original image and the images produced by the different types of shaders:</p>
+<p><img src="NoTexting-small.png" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" />&nbsp;&nbsp; <img src="Texting-small.png" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></p>
+<h2>2. Programming Environment</h2>
+<p>As with previous assignments, a programming environment is supplied for you. This environment uses OpenGL, GLFW, and GLEW (C/C++) and GLUT (python), Code is provided for C, C++, and python (the python modules differ slightly from the C/C++ versions but provide the same functionality). &nbsp; You are free to use any of these implementations. The environment includes the following modules which <em>should not be modified:</em></p>
+<ul>
+<li>
+<p><code>Buffers/bufferSet</code> - a support module providing OpenGL vertex and element buffer support.</p>
+</li>
+<li>
+<p><code>Canvas/simpleShape</code> - a support module that provides functions for manipulating the shape.</p>
+</li>
+<li>
+<p><code>ShaderSetup</code> - a support module that reads, compiles, and links GLSL shader programs.</p>
+</li>
+<li>
+<p><code>Shapes/teapot quad</code> - definition of objects, including face normals and vertex normals</p>
+</li>
+<li>
+<p><code>textingMain</code> - the main function for the application.</p>
+</li>
+<li>
+<p><code>Viewing/viewParams</code> - transformation matrices for the shapes and the camera</p>
+</li>
+</ul>
+<p>You <em>must</em> modify and submit the following components:</p>
+<ul>
+<li>
+<p><code>phong.vert, phong.frag</code> - "starter" shaders for Phong shading</p>
+</li>
+<li>
+<p><code>texture.vert, texture.frag</code> - "starter" shaders for texture mapping</p>
+</li>
+<li>
+<p><code>Lighting</code> - a support module that contains code for defining and managing the parameters for the Phong Illumination Model</p>
+</li>
+<li>
+<p><code>Textures</code> - support module that contains routines for loading a texture image and for setting up parameters for using the texture</p>
+</li>
+</ul>
+<p>See the <em>Supplied Files</em> section (below) for details on how to download the framework.</p>
+<h2>3. Routines to Implement</h2>
+<p>You must edit the <code>Lighting</code> module and provide an implementation for the following function:</p>
+<ul>
+<li>
+<p><code>void setUpPhong( GLuint program );</code><br /> Send all the appropriate parameters to the shaders to implement Phong Illumination and Phong Shading.</p>
+</li>
+</ul>
+<p>The <code>program</code> argument is the ID of the active shader program. You will need to use this ID to gain access to the shader global variables you must modify. You only need to modify this single function; you should not modify the <code>Lighting.h</code> header file.</p>
+<p>Next, you must modify the <code>Textures</code> module to provide implementations for the following functions:</p>
+<ul>
+<li>
+<p><code>void loadTexture( void );</code><br /> Used to load whatever texture data your application needs to use. (See below for information about texture image files supplied with the programming framework.)</p>
+</li>
+<li>
+<p><code>void setUpTexture( GLuint program );</code><br /> Used to set up the parameters for texture mapping.</p>
+</li>
+</ul>
+<p>Finally, you must modify the supplied GLSL shader files to achieve the required shading effects.</p>
+<p><strong><em>Important note:</em></strong> You are not allowed to "hard-code" any of the lighting or texture parameters into the shader files; all of these parameters must be sent to the shaders from your <code>setUp*()</code> functions.</p>
+<h2>4. Supplied Files</h2>
+<p>The programming framework for this assignment is available as a ZIP archive which is available in the CONTENT-&gt;Assignment Material area of mycourses.&nbsp; You can also access this file directly by clicking <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5425995" target="_self">here</a>.</p>
+<p>The ZIP archive contains a folder named <code>lab6</code>; under that are subfolders <code>c</code>, <code>c++,python</code>, and <code>misc</code> (as in previous assignments). In the C and C++ folders you'll find a file named <code>header.mak</code>, for use on the CS systems to help you generate a <code>Makefile</code> that will compile and link your program with the libraries used by the framework. See the contents of <code>header.mak</code> for details on how to do this.</p>
+<p>This framework also contains a fifth subfolder named <code>images</code> which contains the following image files, obtained from <a target="_blank" href="http://www.clipartpanda.com/categories/happy-and-sad-face-clip-art" rel="noopener noreferrer"> <code>clipartpanda.com</code></a> (file names changed for simplicity):</p>
+<ul>
+<li>
+<p><code>smiley2.png</code> - the image you should use for texture mapping the quad</p>
+</li>
+<li>
+<p><code>frowny2.png</code> - an alternate image to be used for texture mapping if you are attempting to earn the bonus points (see the <em>Grading</em> section for details)</p>
+</li>
+</ul>
+<p><em>Note:</em> You will need to copy or move these images into the directory which contains your source code.</p>
+<p>Finally, the framework also contains a sixth subfolder <span style="font-family: courier new, courier, sans-serif; font-size: 10pt;">soil_modified</span> (See Notes section below for info).</p>
+<h2>5. What to Submit</h2>
+<p>Your implementations will be tested with a driver program which may be different from the driver found in the framework archive (see above).</p>
+<p>The following files must be submitted:</p>
+<blockquote>
+<table cellpadding="3">
+<tbody>
+<tr>
+<td>all:</td>
+<td>&nbsp;</td>
+<td><code>phong.frag</code>, <code>phong.vert</code>, <code>texture.frag</code>, <code>texture.vert</code></td>
+</tr>
+<tr>
+<td>C:</td>
+<td>&nbsp;</td>
+<td><code>Lighting.c</code> and <code>Textures.c</code></td>
+</tr>
+<tr>
+<td>C++:</td>
+<td>&nbsp;</td>
+<td><code>Lighting.cpp</code> and <code>Textures.cpp</code></td>
+</tr>
+<tr>
+<td>python</td>
+<td></td>
+<td><code>lighting.py</code> and t<code>extures.py</code></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>Optionally, you may submit a modified version of the <code>header.mak</code> file, which should be based on the version found in the ZIP archive.</p>
+<p>No other files from the distribution should be submitted. (Unlike previous assignments, you cannot modify and submit the header files associated with the <code>Lighting</code> and <code>Textures</code> modules.) All other parts of the framework, including the two image files, will be used in grading but need not be submitted.</p>
+<p>If you are using a matrix library other than the ones described in earlier assignments, writeup, you may also submit those files.</p>
+<p>The minimum acceptance test is that your code must be complete - that is, it must compile and link cleanly when submitted. Submissions <em>will not be accepted</em> if they fail to compile and link cleanly. (Warning messages from the compiler are acceptable, but not fatal errors.)</p>
+<p>Submissions can be made to the dropbox labeled <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=dropbox&amp;rcode=rochester-5426716" target="_self">Assignment 6 - Textures and Lighting</a></p>
+<h2>6. Grading</h2>
+<p>This assignment is worth 50 points, distributed as follows:</p>
+<ul>
+<li>
+<p><em>Creates a window</em>: 5 points<br /> Your code compiles, runs, and produces a stable window without blowing up.</p>
+</li>
+<li>
+<p><em>Proper object shading</em>: 20 points for Phong shading<br /> The appearance of the objects is correct, including diffuse and specular effects.</p>
+</li>
+<li>
+<p><em>Proper texture mapping</em>: 20 points for texture mapping<br /> The appearance of the objects is correct, including the orientation and positioning of the image on the quad.</p>
+</li>
+<li>
+<p><em>Documentation and style</em>: 5 points<br /> Self-explanatory.</p>
+</li>
+</ul>
+<p>You also have the opportunity to earn bonus points on this assignment:</p>
+<ul>
+<li>
+<p><em>Two-sided texture mapping</em>: 5 points<br /> While applying the "smiley face" image to the front side of the quad, also apply the "frowny face" image as a texture map to the <em>back</em> side of the quad.</p>
+</li>
+</ul>
+<p>If you choose to do this bonus, remember that you'll need to load both texture images; this means your <code>loadTexture()</code> function will need to load <em>two</em> image files into <em>separate</em> texture units. You'll also need to figure out which side of the polygon is being shaded in the fragment shader in order to apply the correct texture image. (Some research on the OpenGL pipeline variable <code>gl_FrontFacing</code> may be useful here.)</p>
+<h2>7. Notes</h2>
+<p>The OpenGL, GLSL, shading, and texture mapping lecture notes presented in class should help you to get started on this assignment, as should the files provided with earlier OpenGL assignments.</p>
+<p>Remember that Phong shading interpolates the normal vector across the polygon (done for you by the rasterizer in the OpenGL pipeline) and calculates color based on that.</p>
+<p>Refer back to the "Hello, OpenGL!" programming assignment for information about obtaining and installing GLFW and/or GLEW libraries.</p>
+<p>Remember that in addition to transforming the vertex and light locations into clip (eye) space, the vertex shader must also transform the surface normal into clip space. Many vertex shaders use an OpenGL built-in variable named <code>gl_NormalMatrix</code> to do this; however, because we are using shader-based OpenGL, you cannot use that variable. Here are some web pages which explain how to calculate it:</p>
+<ul>
+<li><a href="http://www.lighthouse3d.com/tutorials/glsl-tutorial/the-normal-matrix/"> <em>The Normal Matrix</em></a> at <code>lighthouse3d.com</code></li>
+<li><a href="http://www.songho.ca/opengl/gl_normaltransform.html"> <em>OpenGL Normal Vector Transformation</em></a> at <code>songho.ca</code> (note: fixed-pipeline OpenGL)</li>
+<li><a href="https://www.gamedev.net/topic/598985-gl-normalmatrix-in-glsl-how-to-calculate/"> <em>gl_NormalMatrix in GLSL how to calculate?</em></a> at <code>gamedev.net</code></li>
+</ul>
+<p>You may use convenience libraries for loading your texture images. We recommend the use of SOIL, found online at <a href="http://www.lonesock.net/soil.html"> <code>http://www.lonesock.net/soil.html</code></a>, and already installed on the CS Ubuntu systems All framework files in which SOIL might be used include the necessary header as <code>&lt;SOIL.h&gt;</code> - if you need to include it in other files, use the same path, and (if necessary) tell your compiler where to find the header; the <code>header.mak</code> file is set up to properly compile and link against SOIL on the CS Ubuntu systems.</p>
+<p><strong>A small caveat about the SOIL library.&nbsp;&nbsp;</strong> The library was written quite some time ago and makes use of features that have since been deprecated in newer versions of OpenGL.&nbsp; That said, as many systems do allow for some backwards compatibility in their OpenGL implementations, this may not be an issue.&nbsp; However, on other systems, (e.g. the Mac), you may run into compatibility problems.&nbsp;&nbsp; I've created a new version of SOIL which fixes some of theses problems and placed the modified source in the subfolder <span style="font-size: 10pt;"><strong><span style="font-family: courier new, courier, sans-serif;">soil_modified. <br /></span></strong></span></p>
+<p>If you do need to use this modified version, you will need to compile the new source and include it in your project.&nbsp; The c files that will need to be compiled from the new distribution are <span style="font-size: 10pt;"><strong><span style="font-family: courier new, courier, sans-serif;">SOIL.c, stb_image_aug.c, image_helper.c, and image_DXT.c.</span></strong></span>&nbsp;&nbsp; Once&nbsp; compiled and assembled into a shared source file (<span style="font-family: courier new, courier, sans-serif; font-size: 10pt;">.so</span> or <span style="font-family: courier new, courier, sans-serif; font-size: 10pt;">DLL</span>), you will need to copy the appropriate <span style="font-family: courier new, courier, sans-serif; font-size: 10pt;">.so</span> or <span style="font-family: courier new, courier, sans-serif; font-size: 10pt;">DLL</span> file into your working directory along with the <span style="font-family: courier new, courier, sans-serif; font-size: 10pt;">pysoil.py</span> that is found in the <span style="font-family: courier new, courier, sans-serif; font-size: 10pt;">soil_modified</span> folder.&nbsp;&nbsp; A shell script that produces these files on the Mac (<span style="font-family: courier new, courier, sans-serif; font-size: 10pt;">build_soil.sh</span>) can be found in the <span style="font-family: courier new, courier, sans-serif; font-size: 10pt;">misc </span>subfolder.</p>
+<p>My advice is to download, install, and use the official SOIL distribution (found using <a href="http://www.lonesock.net/soil.html" target="_blank" rel="noopener noreferrer">this link</a>) first and only resort to using the modified version if you have trouble with the original. For python, the official distribution of PySOIL, a python wrapper over the soil libraries, can be found <a href="https://pypi.python.org/pypi/pysoil/0.1" target="_blank" rel="noopener noreferrer">here</a>.&nbsp; This distribution also includes the outdated soil source.</p>
+<p></p>
+</body>
+</html>

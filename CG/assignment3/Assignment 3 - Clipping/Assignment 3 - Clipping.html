@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div title="Page 1">
+<div>
+<div>
+<h2>1. Introduction</h2>
+<div title="Page 1">
+<div>
+<div>
+<p>In this course, you will implement some of the 2D drawing routines we have been discussing in class. This will help improve your understanding of these algorithms.</p>
+<p>This assignment involves polygon clipping. You will implement the Sutherland-Hodgman Polygon Clipper discussed in class. You have the option of doing this assignment in C, C++, or Python.</p>
+<div title="Page 1">
+<div>
+<div>
+<h2>2. Programming Environment</h2>
+<div title="Page 1">
+<div>
+<div>
+<p>As with the previous assignments, the programming environment that you will use for this assignment is a set of simple modules with implementations in C, C++, Python and Java. You are free to use any of the implementations. The modules include:</p>
+<ul>
+<li><span style="font-family: courier new,courier,sans-serif;">simpleCanvas / Canvas&nbsp;</span> - a simple 2D canvas that allows the ability to set a pixel.</li>
+<li><span style="font-family: courier new,courier,sans-serif;">extendedCanvas</span> - an extension to simpleCanvas that has additional methods used specifically for testing this assignment.</li>
+<li><span style="font-family: courier new,courier,sans-serif;">clipper</span> - a simple module that performs the clipping.</li>
+<li><span style="font-family: courier new,courier,sans-serif;">clipTest / clipMain</span> - the main function for the application.</li>
+</ul>
+<p>In addition, the following auxillary classes / files are included for the C/C++ versions:</p>
+<ul>
+<li>
+<p><code>Buffers</code> - a support module providing OpenGL vertex and element buffer support.</p>
+</li>
+<li>
+<p><code>ShaderSetup</code> - a support module that handles shader program compilation and linking.</p>
+</li>
+<li>
+<p><code>Vertex</code> - a module that describes the structure of a vertex<code>.</code></p>
+</li>
+<li>
+<p><code>shader.vert</code>, <code>shader.frag</code> - simple GLSL 1.50 shaders.</p>
+</li>
+<li>
+<p><code>alt.vert</code>, <code>alt.frag</code> - simple GLSL 1.20 shaders.</p>
+</li>
+</ul>
+<p>Finally, The C version includes a module named <code>FloatVector</code> which provides an extensible vector holding floating-point values. Both the C and C++ versions include a file named <code>header.mak</code> for use with the <code>gmakemake</code> program on our systems to create a <code>Makefile</code> to simplify compilation and linking of the program</p>
+<p>See the Supplied Files section (below) for details on how to download the framework</p>
+<h2>3. Routine to Implement</h2>
+<p>The only module that you will need to modify is the <span style="font-family: courier new,courier,sans-serif;">clipper</span> module. For this assignment, you will need to complete the method <span style="font-family: courier new,courier,sans-serif;">clipPolygon()</span>, implementing the Sutherland-Hodgman Polygon Clipper algorithm. The prototype for this method is slightly different in Python compared to the C and C++ versions; for C and C++, it looks like this:</p>
+<ul>
+<li><span style="font-family: courier new,courier,sans-serif;">int clipPolygon( int in, const Vertex inV[], Vertex outV[], Vertex ll, Vertex ur );</span></li>
+</ul>
+<p>whereas in Python, the signature looks like:</p>
+<ul>
+<li><span style="font-family: courier new,courier,sans-serif;">clipPolygon(self,in,inx,iny,outx,outy,llx,lly,urx,ury)</span></li>
+</ul>
+<div title="Page 2">
+<div>
+<div>
+<p>In both cases, <span style="font-family: courier new,courier,sans-serif;">in</span> is the number of vertices in the polygon to be clipped, an array of input verticies (<span style="font-family: courier new,courier,sans-serif;">inx, iny</span> for Python, <span style="font-family: courier new,courier,sans-serif;">inV</span> for C/C++) holding the coordinates of the polygon vertices before clipping are passed in and arrays of output vertices (<span style="font-family: courier new,courier,sans-serif;">outx, outy</span> for Python, <span style="font-family: courier new,courier,sans-serif;">outV</span> for C/C++) that will hold the coordinates of the polygon vertices after clipping.&nbsp; The coordinates of lower left (<span style="font-family: courier new,courier,sans-serif;">llx, lly</span> for Python, <span style="font-family: courier new,courier,sans-serif;">ll</span> for C/C++) and upper-right (<span style="font-family: courier new,courier,sans-serif;">urx, ury</span> for Python and <span style="font-family: courier new,courier,sans-serif;">ur</span> for C/C++) corners of the clipping rectangle are also passed into the function. The function should return the count of vertices after clipping (i.e., the number of entries in output arrays which contain valid data).</p>
+</div>
+</div>
+</div>
+<div title="Page 2">
+<div>
+<div>
+<p>You are free to add additional data members and methods to the <span style="font-family: courier new,courier,sans-serif;">clipper</span> module as you see fit; however, you cannot modify any of the other modules.</p>
+</div>
+</div>
+</div>
+<div title="Page 1">
+<div>
+<div>
+<ol start="0" style="list-style-type: none;">
+<li></li>
+</ol>
+<div title="Page 2">
+<div>
+<div>
+<p>Here are an image that will be produced by the <span style="font-family: courier new,courier,sans-serif;">clipTest / clipMain</span> program with the<br /> original clipper module found in the framework, and the image produced when clipper contains a working Sutherland Hodgman Polygon Clipper implementation:</p>
+<p><img src="ClipTestOriginal.png" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" />&nbsp;&nbsp; <img src="ClipTestResults.png" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></p>
+</div>
+</div>
+</div>
+<p>Within these images, outlines in white show the clipping regions; outlines in other colors are the outlines of the original polygons before clipping. Solid-color areas are the polygons that result from clipping against the clipping regions.</p>
+<p>In the <span style="font-family: courier new,courier,sans-serif;">clipTest</span> / <span style="font-family: courier new,courier,sans-serif;"><code>clipMain</code> </span>driver program provided with the framework, the red polygon is entirely inside its clipping region; the blue and magenta polygons each have portions outside their clipping regions on a single side; and the grey and pink polygons have portions outside their clipping regions on multiple sides. The green polygon is being clipped against the upper-left square clipping region; because it is entirely outside of that region, all of its vertices are eliminated by the clipping process. The orange polygon has one or more vertices outside with respect to each edge of its clipping region, and the light brown polygon completely encloses its clipping region.</p>
+<div title="Page 3">
+<div>
+<div>
+<h2>4. Supplied Files</h2>
+<div title="Page 3">
+<div>
+<div>
+<p>The programming framework for this assignment is available as a ZIP archive which can be found in the CONTENT-&gt;Assignment Material section of mycourses and can be accessed by clicking <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5405639" target="_self">here</a>.</p>
+<p>The ZIP archive contains a folder named lab3; under that are subfolders <span style="font-family: courier new,courier,sans-serif;">c, c++,</span> and <span style="font-family: courier new,courier,sans-serif;">python</span>, which contain the obvious things. In the C and C++ folders you'll find a file named <span style="font-family: courier new,courier,sans-serif;">header.mak</span>, for use on the CS systems to help you generate a <span style="font-family: courier new,courier,sans-serif;">Makefile</span> that will compile and link your program with the libraries used by the framework. See the contents of <span style="font-family: courier new,courier,sans-serif;">header.mak</span> for details on how to do this. In the <code>misc</code> folder you'll find the <code>compmac</code> compilation script for Macs.</p>
+<div title="Page 4">
+<div>
+<div>
+<h2>5. What to Submit</h2>
+<div title="Page 4">
+<div>
+<div>
+<p>Your routines will be tested with a set of driver programs; some of them may be different from the driver found in the framework archive. Submit only your modified clipper module and any other supporting code you write - do not submit the driver program or other source code from the framework. If you have additional supporting code (e.g., data structures or methods), you may either put them in the clipper source files or submit them as additional source files.</p>
+<p>If you are working in C++, your implementation must be in a file named <span style="font-family: courier new,courier,sans-serif;">clipper.cpp</span>. If your implementation requires making changes to the <span style="font-family: courier new,courier,sans-serif;">clipper.h</span> file (e.g., you have added data members or member functions to the class declaration), you should submit that file along with <span style="font-family: courier new,courier,sans-serif;">clipper.cpp</span>. If you make changes to the <span style="font-family: courier new,courier,sans-serif;">header.mak</span> file, you may submit your modified file as well.</p>
+<p>Similarly, if you are working in C, your implementation must be in a file named <span style="font-family: courier new,courier,sans-serif;">clipper.c</span>. Again, if your implementation requires making changes to the <span style="font-family: courier new,courier,sans-serif;">clipper.h</span> file, you should submit that file along with clipper.c. If you make changes to the <span style="font-family: courier new,courier,sans-serif;">header.mak</span> file, you may submit your modified file as well.</p>
+<p>If you are working in Python, your implementation must be in a file named <span style="font-family: courier new,courier,sans-serif;">clipper.py</span>.&nbsp; Files can be placed in the Dropbox titled <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=dropbox&amp;rcode=rochester-5405251" target="_self">Assignment 3 - clipping</a>.</p>
+<div title="Page 4">
+<div>
+<div>
+<p>The minimum acceptance test is that your code must be complete - that is, it must compile and link cleanly when submitted. Submissions will not be accepted if they fail to compile and link cleanly. (Warning messages from the compiler are acceptable, but not fatal errors.)</p>
+<h2>6. Grading</h2>
+<p>Your grade will be based on your implementation of the required routine and its usability with the supplied test programs.</p>
+<p>The lists of situations to be checked in your submission (see below) is not exhaustive; the tests run during grading may include other combinations. You may want to modify the test program you are given to cover a wide range of input situations.</p>
+<div title="Page 5">
+<div>
+<div>
+<ul>
+<li>clipPolygon Implementation (40 points)</li>
+<ul>
+<li>entire figure inside region</li>
+<li>entire figure outside region</li>
+<li>one vertex outside with respect to one edge</li>
+<li>one vertex outside w/r/t two edges</li>
+<li>two vertices outside w/r/t one edge</li>
+<li>two vertices outside w/r/t two edge</li>
+<li>multiple vertices outside region</li>
+<li>all vertices outside region</li>
+</ul>
+</ul>
+<ul>
+<li>Other Considerations (10 points)</li>
+<ul>
+<li>documentation / commenting</li>
+</ul>
+</ul>
+<div title="Page 5">
+<div>
+<div>
+<h2>7. Notes</h2>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Java applets are available online to help you visualize&nbsp;<a href="http://min.nl/cs426/" target="_blank" rel="noopener noreferrer">polygon</a> clipping.</p>
+<p>You are guaranteed that the dimensions of the drawing window will be 300x300 pixels.</p>
+<p>Recall that the SHPC algorithm discussed in class clips the incoming vertex list against <em>one side</em> of the clipping region. To clip against the entire region, you'll need to apply the SHPC algorithm four times (once per edge of the region) with the output vertex list from each application being fed as the input vertex list to the next application.</p>
+<p>You are guaranteed that there will be <code>in</code> vertices in the <span style="font-family: courier new,courier,sans-serif;">inx, iny,</span> or <code>inV</code> array, and that they are listed in order around the circumference of the polygon (that is, adjacent vertices in the arrays form one edge of the polygon, with the final edge connecting the last vertex to the first vertex); however, the list may be in either clockwise or counter-clockwise order. (The test program(s) used during grading will make the same assumptions about the vertex count returned from <code>clipPolygon()</code>, and the sequencing of the vertices <span style="font-family: courier new,courier,sans-serif;">outx, outy</span> or <code>outV[]</code> array.)</p>
+<p>It is common knowledge that code for the Sutherland-Hodgman algorithm is freely available on the Internet and in textbooks. You are free to use these references as a guide, but please do not simply cut and paste code from any of these sources.</p>
+<p>Refer back to the&nbsp;<a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5390428" target="_self">Assignment 0 - Hello OpenGL (C/C++ version)</a> programming assignment for information about obtaining and installing the GLFW and/or GLEW libraries (for C/C++) and to&nbsp;<a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5401257" target="_self">Assignment 1 - Line Drawing</a> for info on setting up your Python environment.</p>
+<div>Don't wait until the last minute to submit things! You may, in fact, want to submit even a partially- working solution as you work on it - there is no penalty for making multiple submissions, and this will help ensure that you get something submitted for this assignment.
+<p>Do not make any changes to the function prototypes. This means that your implementations must match the prototypes exactly in terms of number, types, and order of parameters. The reason for this is that the test programs assume that your implementations match those prototypes; if you make changes, there will be compilation errors, and even if the test programs link, they almost certainly won't execute correctly (which means you'll lose substantial amounts of credit for incorrect program pe rformance).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div title="Page 1">
+<div>
+<div>
+<ol start="0" style="list-style-type: none;">
+<li></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

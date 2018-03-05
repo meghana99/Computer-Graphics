@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<h2>1. Introduction</h2>
+<div title="Page 1">
+<div>
+<div>
+<p>In this course, you will implement some of the 2D drawing routines we have been discussing in class. This will help improve your understanding of these algorithms. This assignment involves line drawing. You will implement the <strong>Midpoint Line Drawing algorithm</strong> discussed in class. You have the option of doing this assignment in C, C++, or Python.</p>
+<h2>2. Programming Environment</h2>
+<div title="Page 1">
+<div>
+<div>
+<p>The programming environment that you will use for this assignment (along with the remainder of the 2D assignments) is a set of simple modules with implementations in C, C++, and Python. These modules are designed as object-oriented classes in the C++,&nbsp; and Python versions, and as equivalent non-OO versions in C. You are free to use any of the implementations. The classes include:</p>
+<ul>
+<li><span style="font-family: courier new,courier,sans-serif;">simpleCanvas</span> - a simple 2D canvas that allows the ability to set a pixel.</li>
+<li><span style="font-family: courier new,courier,sans-serif;">Rasterizer</span> - a module that implements rasterization algorithms</li>
+<li><span style="font-family: courier new,courier,sans-serif;"> lineTest</span> - the main function for the application.</li>
+</ul>
+<p>The C/C++ systems use an OpenGL based framework under the hood.&nbsp; For the 2D assignments, you will not need to be concerned with the details of this basic framework implementation, except to the extent that you'll need to assure that OpenGL is working properly on your development system.&nbsp;&nbsp; You will also see extra files in the C/C++ folders to support this framework that are not found in the Python folders.&nbsp;&nbsp; A working OpenGL can confirmed by completing <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5390428" target="_self">Assignment 0 - Hello Open GL</a>, <strong>which should be done prior to starting this assignment.</strong></p>
+<div title="Page 6">
+<div>
+<div>
+<p>The Python version of the 2D framework uses python 2.7 and relies on the&nbsp; <a href="https://matplotlib.org/faq/installing_faq.html#install-osx-binaries" target="_blank" rel="noopener noreferrer">Matplotlib</a> and <a href="http://www.numpy.org/" target="_blank" rel="noopener noreferrer">Numpy</a> libraries under the hood.&nbsp;&nbsp; You will need to download and install these packages and necessary dependencies. For Windows, you can use <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">http://www.lfd.uci.edu/~gohlke/pythonlibs/</a> to download the required libraries. For Mac users you may chose <a href="http://penandpants.com/2013/04/04/install-scientific-python-on-mac-os-x/">http://penandpants.com/2013/04/04/install-scientific-python-on-mac-os-x/</a> by using Homebrew.</p>
+<h2>3. Routines to Implement</h2>
+<p>You will need to modify the <span style="font-family: courier new,courier,sans-serif;">Rasterizer</span> module.&nbsp; For this assignment, you will need to complete the method <span style="font-family: courier new,courier,sans-serif;">drawLine()</span>, implementing the Midpoint Line Drawing algorithm and the method <code>myInitials()</code> to draw your initials (see below).&nbsp;&nbsp; In your implementation, you need only make use of the method <span style="font-family: courier new,courier,sans-serif;">setPixel()</span> on the <span style="font-family: courier new,courier,sans-serif;">simpleCanvas</span> object passed in as a parameter in order to manipulate the pixels on the canvas. The prototype for the <span style="font-family: courier new,courier,sans-serif;">drawLine()</span> method varies a bit between languages:</p>
+<ul>
+<li>C:&nbsp;&nbsp;&nbsp; <span style="font-family: courier new,courier,sans-serif;">void drawLine( int x0, int y0, int x1, int y1, simpleCanvas *C, Rasterizer *R );</span></li>
+<li><span style="font-family: times new roman,times,serif;"><span style="font-family: times new roman,times,serif;">C++:&nbsp; <span style="font-family: courier new,courier,sans-serif;">void drawLine( int x0, int y0, int x1, int y1, simpleCanvas &amp;C );</span><br /></span></span></li>
+<li><span style="font-family: times new roman,times,serif;"><span style="font-family: times new roman,times,serif;">Python: <span style="font-family: courier new,courier,sans-serif;">drawLine(x0, y0, x1, y1, simpleCanvas)</span></span></span></li>
+</ul>
+<div title="Page 1">
+<div>
+<div>
+<p>In all cases, the line is drawn from vertex (x0,y0) to vertex (x1,y1). The additional parameter in the C version is due to the fact that C is not an object-oriented language. In C++ and Python, the <span style="font-family: courier new,courier,sans-serif;">drawLine()</span> method is part of the <span style="font-family: courier new,courier,sans-serif;">Rasterizer</span> class, and is invoked in the standard way:</p>
+</div>
+</div>
+</div>
+<div title="Page 2">
+<div>
+<div>
+<pre>Rasterizer R;
+R.drawLine( ... );
+</pre>
+<p>In C, because <span style="font-family: courier new,courier,sans-serif;">drawLine()</span> is a standalone function, the <span style="font-family: courier new,courier,sans-serif;">Rasterizer</span> it is being applied to must be supplied as a parameter. You are free to add additional members and methods to Rasterizer as you see fit; however, you cannot modify the <span style="font-family: courier new,courier,sans-serif;">simpleCanvas</span> module.</p>
+<p>In addition to implementing the <code>drawLine()</code> method, you must modify the <code>myInitials()</code> method (in <span style="font-family: courier new,courier,sans-serif;">Rasterizer</span>) to add your own first and last initials to the image, drawing these letters in blue. You are free to use any style you wish for these letters; the only constraint is that they should be drawn as a series of line segments (as the existing letters are drawn).</p>
+<p>The slides for the midpoint line algorithm covered the case where the line segment had a small positive slope (0 &lt; m &lt; 1); your implementation must also handle the other three cases (large positive slope, small negative slope, and large negative slope). Also, remember that we assumed that the line was being drawn from left to right (i.e., thatx0 was less than x1); you are not guaranteed that this will be the case, so you'll need to remember to check the incoming coordinates and swap the vertices if necessary.</p>
+<p>Figure 1 below shows the solution for the letters 'G' and 'O' (these coordinates are provided for you). Figure 2 shows the complete solution for a student with the initials 'RB', drawn using the same style as original.</p>
+<p><img src="figure1-scaled.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></p>
+</div>
+</div>
+<div>
+<div>
+<p>Figure 1.</p>
+</div>
+</div>
+</div>
+<div title="Page 3">
+<div>
+<div>
+<p><img src="figure2-scaled.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></p>
+<p>Figure 2.</p>
+<h2>4. Supplied files</h2>
+<p>The programming framework for this assignment is available as the ZIP archive, lab1.zip.&nbsp;&nbsp; It can be found in the Assignment materials folder of CONTENT or by clicking <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5390522" target="_self">here</a>.</p>
+<p>The ZIP archive contains a folder named <span style="font-family: courier new,courier,sans-serif;">lab1</span>; under that are subfolders <span style="font-family: courier new,courier,sans-serif;">c</span>, <span style="font-family: courier new,courier,sans-serif;">c++</span>, and <span style="font-family: courier new,courier,sans-serif;">python, </span>which contain the files for each respective platform. In the C and C++ folders you'll find a file named <span style="font-family: courier new,courier,sans-serif;">header.mak</span>, for use on the CS systems to help you generate a <span style="font-family: courier new,courier,sans-serif;">Makefile</span> that will compile and link your program with the libraries used by the framework. See the contents of <span style="font-family: courier new,courier,sans-serif;">header.mak</span> for details on how to do this.</p>
+<p>There is also a subfolder named <code>misc</code> which contains a shellscript named <code>compmac</code> for use on Mac systems.</p>
+<h2>5. What to Submit</h2>
+<p>There will be two separate submissions for this lab.&nbsp;&nbsp; The first will assure that you have a working programming environment for future 2D assignments,&nbsp; This submission will be made to the dropbox name <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=dropbox&amp;rcode=rochester-5390409" target="_self">Assignment 0 - Programming Environment setup</a>.&nbsp;&nbsp; If you are doing the assignment in C/C++, you should complete <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5390428" target="_self">Assignment 0 - Hello OpenGL (C/C++ version)</a> and submit the results of that assignment to the Assignment 0 dropbox.&nbsp;&nbsp; If you are doing the assignment in Python, please run the python code (without modifications) which should result in a window filled with a back box.&nbsp; Please take a screen shot of that window and submit it to the Assignment 0 dropbox,</p>
+<p>The second submission will contain your implementation of the <span style="font-family: courier new,courier,sans-serif;">drawLine()</span> and <span style="font-family: courier new,courier,sans-serif;">myInitials()<span style="font-family: times new roman,times,serif;">and should be made to the dropbox <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=dropbox&amp;rcode=rochester-5390519" target="_self">Assignemnt 1 - Line Drawing</a>.&nbsp; </span></span></p>
+<div title="Page 4">
+<div>
+<div>
+<p>Your implementations will be tested using a set of driver programs; some of them may be different from the driver found in the framework archive. Submit only your modified<br /> <span style="font-family: courier new,courier,sans-serif;">Rasterizer</span>&nbsp; - do not submit any other source code.</p>
+<p>If you are working in C++, your implementation must be in a file named <span style="font-family: courier new,courier,sans-serif;">Rasterizer.cpp</span>. If your implementation requires making changes to the <span style="font-family: courier new,courier,sans-serif;">Rasterizer.h</span> file (e.g., you have added data members or member functions to the class declaration), you should submit that file along<br /> with Rasterizer.cpp. If you make changes to the <span style="font-family: courier new,courier,sans-serif;">header.mak</span> file, you may submit your modified file as well.</p>
+<p>Similarly, if you are working in C, your implementation must be in a file named <span style="font-family: courier new,courier,sans-serif;">Rasterizer.c.</span> Again, if your implementation requires making changes to the <span style="font-family: courier new,courier,sans-serif;">Rasterizer.h</span> file, you should submit that file along with <span style="font-family: courier new,courier,sans-serif;">Rasterizer.c</span>. If you make changes to the <span style="font-family: courier new,courier,sans-serif;">header.mak</span> file, you may submit your modified file as well.</p>
+<p>For Python, you should submit your modified <span style="font-family: courier new,courier,sans-serif;">Rasterization.py</span> file.</p>
+<div title="Page 4">
+<div>
+<div>
+<p>The minimum acceptance test is that your code must be complete - that is, it must compile and link cleanly when submitted. Submissions will not be accepted if they fail to compile and link cleanly. (Warning messages from the compiler are acceptable, but not fatal errors.)</p>
+<h2>6. Grading</h2>
+<div title="Page 4">
+<div>
+<div>
+<p>Your grade will be based on your implementation of the required routines and its usability with the supplied test programs.</p>
+<p>The lists of situations to be checked in your submission (see below) is not exhaustive; the tests run during grading may include other combinations. You may want to modify the test program you are given to cover a wide range of input situations.</p>
+</div>
+</div>
+<div>
+<div>
+<p>Turn in only your C, C++, or Python&nbsp; implementation file(s) described above and an optional README file in Dropbox submission.</p>
+<p>Grading will be done on a 50 point scale:</p>
+<p><span style="font-family: courier new,courier,sans-serif;">DrawLine</span> Implementation (40 points)</p>
+</div>
+</div>
+</div>
+<div title="Page 5">
+<div>
+<div>
+<ul>
+<li>gentle positive slope</li>
+<li>gentle negative slope</li>
+<li>steep positive slope</li>
+<li>steep negative slope</li>
+<li>horizontal</li>
+<li>vertical</li>
+<li>diagonal</li>
+<li>polygon drawn with multiple calls to drawLine</li>
+</ul>
+<p><span style="font-family: courier new,courier,sans-serif;">myInitials</span> Implemenation (letters are clearly drawn) (5 points)</p>
+<p>Other Considerations, e.g. documentation / commenting (5 points)</p>
+<h2>7. Notes</h2>
+<div title="Page 5">
+<div>
+<div>
+<p>You are guaranteed that the dimensions of the drawing window will be 600x600 pixels.</p>
+<p>The vertices given to <span style="font-family: courier new,courier,sans-serif;">drawLine()</span> may occur in any order - that is, there is no guarantee that <span style="font-family: courier new,courier,sans-serif;">(x0,y0)</span> is the leftmost vertex of the line segment.</p>
+<p>It is common knowledge that the code for the Midpoint algorithm is freely available on the Internet and in textbooks. You are free to use these references as a guide, but please do not simply cut and paste code from any of these sources.Don't wait until the last minute to submit things! You may, in fact, want to submit even a partially- working solution as you work on it - there is no penalty for making multiple submissions, and this will help ensure that you get something submitted for this assignment.</p>
+<p>Do not make any changes to the function prototypes. This means that your implementations must match the prototypes exactly in terms of number, types, and order of parameters. The reason for this is that the test programs assume that your implementations match those prototypes; if you make changes, there will be compilation errors, and even if the test programs link, they almost certainly won't execute correctly (which means you'll lose substantial amounts of credit for incorrect program performance).</p>
+<div title="Page 6">
+<div>
+<div>
+<ol start="0" style="list-style-type: none;">
+<li></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<h2>1. Introduction</h2>
+<p>In this project, you will test your skills with shader-based OpenGL by creating and rendering a 3D scene. This involves:</p>
+<ul>
+<li>3D object definition</li>
+<li>Object placement via model transformations</li>
+<li>Camera placement</li>
+<li>Projection</li>
+<li>Lighting</li>
+<li>Shading</li>
+<li>Texture mapping</li>
+</ul>
+<p>Or, in other words, everything you have been working with on the since the midterm.&nbsp;&nbsp; Slides describing the final can be found <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5425682" target="_self">here</a>.</p>
+<h2>2. Programming Environment</h2>
+<p>Unlike the midterm project and the labs, no programming environment is being provided to you for this assignment. You are free to re-use any or all components from earlier OpenGL-based assignments.</p>
+<p>The earlier OpenGL assignments provided several examples of objects represented by polygon meshes (e.g., a quad and a teapot). You are free to use these, or to re-use your tessellation routines from lab 4.&nbsp;&nbsp; You are more than welcome to use 3D models that you find on the Internet (as long as you attribute them in your submission). Alternatively, you may use a modeling program such as <a href="http://www.blender.org/">Blender</a> to create object models, export the vertex and normal data from the modeling program, and use those models in your program. It will be up to you to get any models that you use into the proper format to be used in an OpenGL application.</p>
+<h2>3. Tasks</h2>
+<p>The theme of the final project is reproducing an existing artwork. &nbsp;&nbsp; You can either choose the artwork that you submitted for the activity:&nbsp; <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=discuss&amp;rcode=rochester-5426210" target="_self">week 11 - online activity (graphics imitating art) - due Wednesday Nov 15 before lecture</a>&nbsp; or you can attempt to reproduce the default image of Luxo Jr. given below.&nbsp; In either case, your task is to reproduce your chosen image to the best of your ability using the OpenGL/GLSL techniques we have covered this semester.</p>
+<blockquote><a target="_blank" rel="noopener noreferrer">&nbsp; <img src="luxo.png" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></a></blockquote>
+<p>Clearly, most shapes in any piece of artwork can be complex, so it is expected that you will create approximations of them; for instance, clearly the ball can be represented as a sphere.&nbsp; However, Luxo can be approximated using a set of stretched cubes with a stretched cone at the top.&nbsp; For very complex shapes such as the wood floor, you could use a flat polygon onto which a picture of wood has been texture-mapped.</p>
+<p>In general, your project must include the following:</p>
+<ul>
+<li>
+<p>At least 3 separate pieces of geometry, each modeled locally and transformed (using model transformations) to&nbsp; position and orient it into the 3D world space</p>
+</li>
+<li>
+<p>Non-default camera positioning, using a frustum/perspective projection</p>
+</li>
+<li>
+<p>At least one point light source</p>
+</li>
+<li>
+<p>Use of at least one texture</p>
+</li>
+<li>
+<p>Shading on all objects which aren't texture-mapped, with at least two visually different sets of material properties.</p>
+</li>
+</ul>
+<p>For your texture image, you may use an actual image, or may use a procedurally-generated texture. This can be mapped onto a flat surface (as in lab 6), or you may choose to use cylindrical or spherical mapping onto some other shape.</p>
+<p>Your image can be a static image, or can include animation. Simple forms of animation could involve translation/rotation/scaling of objects. More interesting animation could involve moving light sources or the camera. Animation can be discrete (i.e., one keystroke produces one change) or continuous (one keystroke starts animation, another stops it). Several of the 3D labs include code to perform animations, and you are free to reuse or adapt it as needed.</p>
+<p>The only restrictions on what you do are as follows:</p>
+<ul>
+<li>
+<p>You are free to build your own models if you wish, or use a modeling program such as Blender or Maya to build them, or even use models found on the Internet.&nbsp; If you use a modeling program to generate your object models, you must identify the program used and what information (e.g., vertex locations, surface normals, etc.) the program provided for you.&nbsp;&nbsp; If you use a model from a Web site, you should acknowledge the source of the model.</p>
+</li>
+<li>
+<p>Each shader program must perform a single type of shading - e.g., if you want to do Phong shading, flat shading, and texture mapping, you will need three shader programs.</p>
+</li>
+<li>
+<p>The names of the shader program source files comprising a single shader program must have a common prefix (e.g., <code>phong.frag</code> and <code>phong.vert</code>), and you must use the <code>.frag</code> and <code>.vert</code> file name suffixes we have been using all semester.</p>
+</li>
+<li>
+<p>All shader programs must be written by you. While you are free to research techniques for shading, any code inspired by outside sources <strong>must be completely documented</strong> as to the source.</p>
+</li>
+</ul>
+<h2>4. What to Submit</h2>
+<p>For this assignment, you should submit the following:</p>
+<ul>
+<li>
+<p><strong>All</strong> of your source files, including your shader files and all C/C++ or python source files.</p>
+</li>
+<li>Remember to submit all your GLSL shader files with your solution!</li>
+<li>
+<p><strong>All</strong> of the texture image files you are using.</p>
+</li>
+<li>
+<p>Any additional library files (see below).</p>
+</li>
+<li>A README where you should indicate, the language, platform (Windows, Mac, Linux, etc), the version of OpenGL supported by your development platform, and instructions on how to build and run your code.&nbsp;&nbsp; In the README, you should also attribute the source of any models that you might have used, a list of libraries used and attributions to any site or reference that provided guidance or suggestions for your shaders.</li>
+</ul>
+<p>If you are using one of the matrix libraries described in the <em>Notes</em> section of the <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5415711" target="_self">lab 5 writeup</a>, please <strong>do not</strong> submit copies of those files;&nbsp; If you are using a matrix library other than the ones described there, then you must submit those files with your solution.</p>
+<p>Finally, please submit all of your files compressed as a single ZIP file.&nbsp; You can place your submission in the Dropbox labeled <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=dropbox&amp;rcode=rochester-5426617" target="_self">Final Programming Assignment</a>.</p>
+<p><strong>This assignment is due on December 15, 2017 by 11:59PM.&nbsp; This is a hard deadline if I am to get your final course grades posted on time.&nbsp; There will be no extension or resubmits!&nbsp; No exceptions.</strong></p>
+<h2>5. Grading</h2>
+<p>Your submission will be graded out of 100 points, as follows:</p>
+<ul>
+<li>50 points for submitting code that compiles, runs stably (i.e., doesn't crash), and produces a window.</li>
+<li>&nbsp;9&nbsp; points for object construction</li>
+<li>&nbsp;6 points for model transformations</li>
+<li>&nbsp;4 points for using a non-default camera position</li>
+<li>&nbsp;6&nbsp; points for using at least one light and shading using material properties</li>
+<li>&nbsp;5&nbsp; points for shading using texture mapping on at least one object</li>
+<li>10 points for similarity to the original image</li>
+<li>10 style points (see below)</li>
+</ul>
+<p>10 points of your grade are reserved for style points.&nbsp; Items considered for style points are given below. In addition, you can earn up to extra bonus points (at the discretion of your instructor) for going above and beyond the basic requirements for this assignment and doing more of these than required.</p>
+<ul>
+<li>extensive documentation of code and shaders</li>
+<li>significant complexity of the objects in your scene</li>
+<li>additional lights/etc. in your scene</li>
+<li>animation of objects, lights, or camera</li>
+<li>notable creativity in your image</li>
+</ul>
+<p>Note especially that you are <strong>not</strong> being graded on your artistic ability or your ability to create perfectly-crafted object models. You are being graded on your ability to create objects which approximate the ones in the image, place them in approximately correct positions, and shade them as described above.</p>
+<h2>6. Notes</h2>
+<p>As discussed in class, remember that the intent of this assignment is for you to apply all of the experience you have gained throughout the course and, more specifically, through the OpenGL programming assignments. This means that you are submitting a shader-based OpenGL program. <em> Solutions which use fixed-pipeline OpenGL or related deprecated OpenGL functions or support libraries (such as the GLU library) are <strong>not acceptable</strong>. </em></p>
+<p>Finally, I hope you will have some fun with this assignment....I will try to post a sampling of the image results to mycourses after final grades for the class have been submitted.</p>
+</body>
+</html>

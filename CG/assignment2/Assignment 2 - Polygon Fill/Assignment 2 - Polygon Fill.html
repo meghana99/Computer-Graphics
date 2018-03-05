@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div title="Page 1">
+<div>
+<div>
+<h2>1. Introduction</h2>
+<p>In this course, you will implement some of the 2D drawing routines we have been discussing in class. This will help improve your understanding of these algorithms.</p>
+<p>This assignment involves polygon filling. You will implement the scanline polygon fill algorithm discussed in class. You have the option of doing this assignment in Python, C, or C++.</p>
+<div title="Page 1">
+<div>
+<div>
+<h2>2. Programming Environment</h2>
+<div title="Page 1">
+<div>
+<div>
+<p>As with the line drawing assignment, the programming environment that you will use for this assignment is a set of simple modules with implementations in C, C++, and Python. You are free to use any of the implementations.&nbsp; Note that modules for the Python and C/C++ versions have slightly different names.&nbsp; In the list below, the names of the Python modules are provided first The modules include:</p>
+<ul>
+<li><span style="font-family: courier new,courier,sans-serif;">simpleCanvas / Canvas</span> - a simple 2D canvas that allows the ability to set a pixel.</li>
+<li><span style="font-family: courier new,courier,sans-serif;">Rasterization / Rasterizer</span> - a module that implements rasterization algorithms</li>
+<li><span style="font-family: courier new,courier,sans-serif;">fillTest / fillMain</span> - the main function for the application</li>
+</ul>
+<p>in addition, the C/C++ versions contain the following auxillary files:</p>
+<ul>
+<li>
+<p><span style="font-family: courier new,courier,sans-serif;"><code>Buffers</code></span> - a support module providing OpenGL vertex and element buffer support.</p>
+</li>
+<li>
+<p><code>ShaderSetup</code> - a support module that handles shader program compilation and linking.</p>
+</li>
+<li>
+<p><code>shader.vert</code>, <code>shader.frag</code> - simple GLSL 1.50 shaders.</p>
+</li>
+<li>
+<p><code>alt.vert</code>, <code>alt.frag</code> - simple GLSL 1.50 shaders.</p>
+</li>
+<li>
+<p>The C version includes a module named <code>FloatVector</code> which provides an extensible vector holding floating-point values. Both the C and C++ versions include a file named <code>header.mak</code> for use with the <code>gmakemake</code> program on our systems to create a <code>Makefile</code> to simplify compilation and linking of the program.</p>
+</li>
+</ul>
+See the Supplied Files section (below) for details on how to download the framework.</div>
+<div></div>
+<h2>3. Routines to Implement</h2>
+<div>
+<div>
+<p>The only module that you will need to modify is the <span style="font-family: courier new,courier,sans-serif;">Rasterization / Rasterizer</span> class. For this assignment, you will need to complete the method <span style="font-family: courier new,courier,sans-serif;">drawPolygon()</span>, implementing the scanline polygon fill algorithm. In your implementation, you need only make use of the method <span style="font-family: courier new,courier,sans-serif;">setPixel()</span> on the <span style="font-family: courier new,courier,sans-serif;">simpleCanvas / Canvas</span> object passed in as a parameter in order to manipulate the pixels on the canvas. The prototype for the <span style="font-family: courier new,courier,sans-serif;">drawPolygon()</span> method varies a bit between languages</p>
+</div>
+</div>
+<div>
+<div title="Page 1">
+<div>
+<div>
+<ul>
+<li>C: <span style="font-family: courier new,courier,sans-serif;">void drawPolygon( int n, const int x[], const int y[], Rasterizer *R )</span></li>
+<li>C++:&nbsp; <span style="font-family: courier new,courier,sans-serif;">void drawPolygon( int n, const int x[], const int y[] );</span></li>
+<li>Python:&nbsp; <span style="font-family: courier new,courier,sans-serif;">drawPolygon(self, n,x,y,sc)</span></li>
+</ul>
+</div>
+</div>
+<div>
+<div>
+<p>Where x and y are arrays containing the coordinates of the polygon to be drawn, and n is the number of vertices in the polygon (and, as such, indicates the size of the two coordinate arrays).</p>
+</div>
+</div>
+</div>
+<div title="Page 2">
+<div>
+<div>
+<p>You are free to add additional members, methods, and data structures to <span style="font-family: courier new,courier,sans-serif;">Rasterization / Rasterizer</span> as you see fit; however, you cannot modify the <span style="font-family: courier new,courier,sans-serif;">simpleCanvas / Canvas</span> module or the <span style="font-family: courier new,courier,sans-serif;">fillTest / fillMain</span> driver program.</p>
+<p>Here is the drawing that will be produced by the&nbsp; program:</p>
+<p><img src="FillTestResults-small.png" alt="FillTest results" title="FillTest results" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></p>
+<p>With the exception of the green triangle and the blue quad, all other objects (including the borders) are drawn as multiple polygons. Furthermore, each polygon is drawn using a different color to make it easier to identify problem areas in your implementation. See the <span style="font-family: courier new,courier,sans-serif;">fillTest / fillMain</span> driver program for full details on the various shapes.</p>
+<h2>4. Supplied Files</h2>
+<div title="Page 2">
+<div>
+<div>
+<p>The programming framework for this assignment (lab2-corrected.zip) is available as a ZIP archive which is found in the <strong>CONTENT-&gt;Assignment Materials</strong> area of mycourses and can be accessed by clicking <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5401934" target="_self">here</a>.</p>
+<p>The ZIP archive contains a folder named <span style="font-family: courier new,courier,sans-serif;">lab2</span>; under that are subfolders c, c++, and python and, which contain the obvious things. In the C and C++ folders you'll find a file named <span style="font-family: courier new,courier,sans-serif;">header.mak</span>, for use on the CS systems to help you generate a <span style="font-family: courier new,courier,sans-serif;">Makefile</span> that will compile and link your program with the libraries used by the framework. See the contents of <span style="font-family: courier new,courier,sans-serif;">header.mak</span> for details on how to do this.&nbsp; There is also a subfolder named <span style="font-family: courier new,courier,sans-serif;">misc</span>&nbsp; which contains a shellscript named <code>compmac</code> for use of the C/C++ version on Mac systems.</p>
+<p>The assignment uses the same underlying framework as in the <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5401257" target="_self">Assignment 1 - Line Drawing</a>,&nbsp; please be sure that all the proper libraries and toolkits, as specified in that writeup, are installed.</p>
+<h2>5. What to Submit</h2>
+<div title="Page 3">
+<div>
+<div>
+<p>Your routines will be tested using a set of driver programs; some of them may be different from the driver found in the framework archive. Submit only your modified Rasterizer code and any other supporting code you write - do not submit the driver program or other source code from the framework. If you have additional supporting code (e.g., data structures or classes), you may either put them in the Rasterizer source files or submit them as additional source files.</p>
+<p>If you are working in C++, your implementation must be in a file named <span style="font-family: courier new,courier,sans-serif;">Rasterizer.cpp</span>. If your implementation requires making changes to the <span style="font-family: courier new,courier,sans-serif;">Rasterizer.h</span> file (e.g., you have added data members or member functions to the class declaration), you should submit that file along with <span style="font-family: courier new,courier,sans-serif;">Rasterizer.cpp</span>. If you make changes to the <span style="font-family: courier new,courier,sans-serif;">header.mak</span> file, you may submit your modified file as well.</p>
+<p>Similarly, if you are working in C, your implementation must be in a file named <span style="font-family: courier new,courier,sans-serif;">Rasterizer.c</span>. Again, if your implementation requires making changes to the <span style="font-family: courier new,courier,sans-serif;">Rasterizer.h</span> file, you should submit that file along with <span style="font-family: courier new,courier,sans-serif;">Rasterizer.c.</span> If you make changes to the <span style="font-family: courier new,courier,sans-serif;">header.mak</span> file, you may submit your modified file as well.</p>
+<p><br /> If you are working in Python, your implementation must be in a file named <span style="font-family: courier new,courier,sans-serif;">Rasterization.py</span>.&nbsp; Please include any additional auxiliary files that may have created with the submission.</p>
+<p>The minimum acceptance test is that your code must be complete - that is, it must compile and link cleanly when submitted. Submissions will not be accepted if they fail to compile and link cleanly. (Warning messages from the compiler are acceptable, but not fatal errors.)</p>
+</div>
+</div>
+<div>
+<div>
+<p>Turn in only your C, C++, or Python implementation file(s) described above and an optional <span style="font-family: courier new,courier,sans-serif;">README</span> file.&nbsp; Files can be placed in the Dropbox titled <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=dropbox&amp;rcode=rochester-5401258" target="_self">Assignment 2 - Polygon Fill</a>.</p>
+<h2>6. Grading</h2>
+<div title="Page 4">
+<div>
+<div>
+<p><span style="font-family: courier new,courier,sans-serif;">drawPolygon</span> Implementation (40 points)</p>
+<ul>
+<li>right triangles</li>
+<li>other triangles</li>
+<li>convex figures - rectangles/quads other convex figures</li>
+<li>concave figures - one concave side</li>
+<li>concave figures - more than one concave side complicated concave figures (e.g., star)</li>
+</ul>
+<p>Other Considerations (10 points)</p>
+<ul>
+<li>documentation / commenting</li>
+</ul>
+</div>
+<h2>7. Notes</h2>
+<div>
+<div title="Page 4">
+<div>
+<div>
+<p><a href="https://www.cs.rit.edu/~icss571/filling/" target="_blank" rel="noopener noreferrer">Java applets</a> are available online to help you visualize polygon filling.</p>
+<p>You are guaranteed that the dimensions of the drawing window will be 901x601 pixels.</p>
+<p>The elements of the <span style="font-family: courier new,courier,sans-serif;">x[]</span> and <span style="font-family: courier new,courier,sans-serif;">y[]</span> arrays are paired up; that is, vertex 0 is (<span style="font-family: courier new,courier,sans-serif;">x[0],y[0]</span>), vertex 1<br /> is (<span style="font-family: courier new,courier,sans-serif;">x[1],y[1])</span>, etc. You are guaranteed that there will be <span style="font-family: courier new,courier,sans-serif;">n</span> coordinates in each array. You are also guaranteed that the vertices given to <span style="font-family: courier new,courier,sans-serif;">drawPolygon()</span> are listed in order around the circumference of the polygon (that is, adjacent vertices in the arrays form one edge of the polygon, with the final edge connecting the last vertex to the first vertex); however, the list may be in either clockwise or count er- clockwise order.</p>
+</div>
+</div>
+</div>
+<div title="Page 5">
+<div>
+<div>
+<p>It is common knowledge that code for the scanline fill algorithm is freely available on the Internet and in textbooks. You are free to use these references as a guide, but please do not simply cut and paste code from any of these sources.</p>
+Refer back to the&nbsp;<a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5390428" target="_self">Assignment 0 - Hello OpenGL (C/C++ version)</a> programming assignment for information about obtaining and installing the GLFW and/or GLEW libraries (for C/C++) and to&nbsp;<a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5401257" target="_self">Assignment 1 - Line Drawing</a> for info on setting up your Python environment.</div>
+<div></div>
+<div>Don't wait until the last minute to submit things! You may, in fact, want to submit even a partially- working solution as you work on it - there is no penalty for making multiple submissions, and this will help ensure that you get something submitted for this assignment.
+<p>Do not make any changes to the function prototypes. This means that your implementations must match the prototypes exactly in terms of number, types, and order of parameters. The reason for this is that the test programs assume that your implementations match those prototypes; if you make changes, there will be compilation errors, and even if the test programs link, they almost certainly won't execute correctly (which means you'll lose substantial amounts of credit for incorrect program pe rformance).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<h2>1. Introduction</h2>
+<p>In this assignment, you will work with OpenGL and GLSL to implement 3D transformations; more specifically,</p>
+<blockquote>
+<table border="0">
+<tbody>
+<tr>
+<td><em>Model transformation</em></td>
+<td>&nbsp;</td>
+<td>Take vertices from model to world coordinates</td>
+</tr>
+<tr>
+<td><em>View transformation</em></td>
+<td>&nbsp;</td>
+<td>Take vertices from world to camera coordinates</td>
+</tr>
+<tr>
+<td><em>Projection transformation</em></td>
+<td>&nbsp;</td>
+<td>Take vertices from camera to clip coordinates</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>You are to write a vertex shader that will transform a tessellated object according to the model, camera, and projection transformations described below. The parameter values for the transformations will be provided from an OpenGL application, and will be given to your shader through the use of appropriate OpenGL API calls.</p>
+<p>Your shader will implement both frustum and orthographic projections of a single tessellated object. The desired projection type must be given to your shader by the OpenGL application.</p>
+<p>The driver program allows the selection of the type of projection, which camera position to use (default, or modified), and whether or not to apply object transformations. Thus, there are eight different possible views of the object, as shown here:</p>
+<table frame="box" rules="all" cellspacing="3" cellpadding="2">
+<thead>
+<tr>
+<td rowspan="2" align="center"><em>Projection<br />Type</em></td>
+<td colspan="2" align="center"><em>Default Camera</em></td>
+<td colspan="2" align="center"><em>Modified Camera</em></td>
+</tr>
+<tr>
+<td align="center">No object transformations</td>
+<td align="center">Object transformations</td>
+<td align="center">No object transformations</td>
+<td align="center">Object transformations</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Frustum</td>
+<td valign="middle" align="center"><img src="stdCamTransOffFrust-sc.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></td>
+<td valign="top" align="center"><img src="stdCamTransOnFrust-sc.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></td>
+<td valign="top" align="center"><img src="CamAdjTransOffFrust-sc.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></td>
+<td valign="top" align="center"><img src="CamAdjTransOnFrust-sc.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td align="center">Orthographic</td>
+<td valign="top" align="center"><img src="stdCamTransOrtho-sc.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></td>
+<td valign="top" align="center"><img src="stdCamTransFrust-sc.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></td>
+<td valign="top" align="center"><img src="CamAdjTransOffOrtho-sc.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></td>
+<td valign="top" align="center"><img src="CamAdjTransOnOrtho-sc.jpeg" alt="" title="" style="max-width: 100%;" data-d2l-editor-default-img-style="true" /></td>
+</tr>
+</tbody>
+</table>
+<h2>2. Programming Environment</h2>
+<p>As with the previous assignments, a programming environment is supplied for you. This environment uses OpenGL, GLUT, and GLEW (C/C++), and is supplied in C, C++, and python versions (the names are slightly different between the C/C++ and python versions).&nbsp; You are free to use either of these implementations. The environment includes the following:</p>
+<ul>
+<li>
+<p><code>Buffers/BufferSet</code> - a support module providing OpenGL vertex and element buffer support.</p>
+</li>
+<li>
+<p><code>Canvas</code> - a support module that provides functions for manipulating the shape. (C/C++ only)</p>
+</li>
+<li>
+<p><code>ShaderSetup</code> - a support module that reads, compiles, and links GLSL shader programs.</p>
+</li>
+<li>
+<p><code>Shapes/SimpleShape</code> - a module containing code to draw a teapot.</p>
+</li>
+<li>
+<p><code>Vertex</code> - a module that describes the structure of a vertex.(C/C++ only)</p>
+</li>
+<li>
+<p><code>Viewing/viewParams</code> - a support module that contains code for defining and managing the model and camera transformations and sending data to the shader program.</p>
+</li>
+<li>
+<p><code>shader.vert, shader.frag</code> - simple GLSL 1.50 shaders.</p>
+</li>
+<li>
+<p><code>transMain</code> - the main function for the application.</p>
+</li>
+</ul>
+<p>The C version includes a module named <code>FloatVector</code> which provides an extensible vector holding floating-point values. Both the C and C++ versions include a file named <code>header.mak</code> for use with the <code>gmakemake</code> program on our systems to create a <code>Makefile</code> to simplify compilation and linking of the program.</p>
+<p>See the <em>Supplied Files</em> section (below) for details on how to download the framework.</p>
+<p>The template program is interactive; it accepts keyboard input to control the display. The following keys can be used to operate the program</p>
+<table border="1">
+<tbody>
+<tr>
+<th>Key(s)</th>
+<th>Function</th>
+</tr>
+<tr>
+<td>1</td>
+<td>Select the frustum projection</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Select the orthographic projection</td>
+</tr>
+<tr>
+<td>
+<p>mouse click (C/C++)</p>
+<p>space (python)</p>
+</td>
+<td>Cycle through the different camera and transformation combinations</td>
+</tr>
+<tr>
+<td>q, Q</td>
+<td>Quit the application</td>
+</tr>
+</tbody>
+</table>
+<h2>3. Routines to Implement</h2>
+<p>You must edit the <code>Viewing/viewParam</code> module and provide implementations for the following functions:</p>
+<ul>
+<li>
+<p><code>setUpFrustum( GLuint program )</code></p>
+<p>Send all the appropriate parameters to the vertex shader to use a frustum projection. This includes parameters involved in the model and camera transforms.</p>
+</li>
+<li>
+<p><code>setUpOrtho( GLuint program )</code></p>
+<p>Send all the appropriate parameters to the vertex shader to use an orthographic projection. This includes parameters involved in the model and camera transforms.</p>
+</li>
+<li>
+<p><code>clearTransforms( GLuint program )</code></p>
+<p>Send all the appropriate parameters for the default model transformations (see below).</p>
+</li>
+<li>
+<p><code>clearCamera( GLuint program )</code></p>
+<p>Send all the appropriate parameters for the default camera (see below).</p>
+</li>
+<li>
+<p><code>setUpTransforms( GLuint program,<br />
+&nbsp;&nbsp;&nbsp;GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ,<br />
+&nbsp;&nbsp;&nbsp;GLfloat rotateX, GLfloat rotateY, GLfloat rotateZ,<br />
+&nbsp;&nbsp;&nbsp;GLfloat translateX, GLfloat translateY, GLfloat translateZ )</code></p>
+<p>Sends all the appropriate parameters for model transformation.</p>
+</li>
+<li>
+<p><code>setUpCamera( GLuint program,<br />
+&nbsp;&nbsp;&nbsp;GLfloat eyeX, GLfloat eyeY, GLfloat eyeZ,<br />
+&nbsp;&nbsp;&nbsp;GLfloat lookatX, GLfloat lookatY, GLfloat lookatZ,<br />
+&nbsp;&nbsp;&nbsp;GLfloat upX, GLfloat upY, GLfloat upZ )</code></p>
+<p>Sends all the appropriate parameters for camera manipulation.</p>
+</li>
+</ul>
+<p>In all cases, the <code>program</code> argument is the ID of the active shader program. You will need to use this ID to gain access to the shader global variables you must modify.</p>
+<p>In addition, you must modify the <code>shader.vert</code> file to implement the various transformations required of the program.</p>
+<p>The supplied framework draws the teapot; however the initial setup will not give you a complete view of the object because no model or camera transformations have been applied to it.</p>
+<p>The transformation values that you need to apply have already been provided by <code>transMain</code> through calls to the various functions in the <code>Viewing</code> module. The default values for these settings (i.e., what the program begins execution with and what it should return to when the model and camera settings are "clear"ed) are as follows:</p>
+<ul>
+<li>
+<p><em>Model transformations:</em> by default, there should be no transformation of the model. Thus, all scale factors should be 1.0, and all rotation angles and all translation factors should be 0.0.</p>
+</li>
+<li>
+<p><em>Camera settings:</em> the default camera position should be the standard OpenGL default: eyepoint at the origin <code>(0,0,0)</code>; lookat set to <code>(0,0,-1)</code>; and up vector set to <code>&lt;0,1,0&gt;</code>.)</p>
+</li>
+<li>
+<p><em>Projection settings:</em> regardless of the projection type being used, the boundaries on the view volume will be: left -1.0, right 1.0, bottom -1.0, top 1.0, near 0.9, and far 4.5.</p>
+</li>
+</ul>
+<p>The driver program will occasionally apply other model and camera settings via calls to <code>setUpTransforms()</code> and <code>setUpCamera()</code>. The order of application of model transformations matters; here is the order in which they should be applied:</p>
+<ul>
+<li>Scale in the <em>y</em> direction by a factor of 2</li>
+<li>Rotate around the <em>z</em> axis by 335 degrees</li>
+<li>Rotate around the <em>y</em> axis by 10 degrees</li>
+<li>Translate by -0.2 in the <em>x</em> direction and by 0.2 in the <em>y</em> direction</li>
+</ul>
+<p>Once implemented, the application will allow you switch between the projection types using the '1' (frustum) and '2' (orthographic) keys, and between the various combinations of model and camera transformations using the left mouse button.</p>
+<p>In implementing these transformations, you may either construct the matrices in your OpenGL application and send them to the shader as a matrix, or send the data required to build the matrices to the shader and have the vertex shader construct them. (It is <em>strongly</em> recommended that you do this in the vertex shader, even though this is much less efficient, as this eliminates the need for a separate matrix library. For more explanation of this, see the <em>Notes</em> section, below.)</p>
+<p>Regardless of where you construct your matrices, all data used by the shaders (either the complete matrices or the original "raw data" used to construct them) must be copied down to the shaders from the application. <em> In no case can you embed any of these parameters or the resulting matrices as "magic numbers" in your shaders! </em> (This includes the view volume settings; although in this assignment the boundaries never change, this may not always be the case.)</p>
+<h2>4. Supplied Files</h2>
+<p>The programming framework for this assignment is available as a ZIP archive. You can download the lab5.zip archive directly from the CONTENT-&gt;Assignment Material section of mycourses or by clicking <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=content&amp;rcode=rochester-5412796" target="_self">here</a>.</p>
+<p>The ZIP archive contains a folder named <code>lab5</code>; under that are subfolders <code>c</code>, <code>c++</code>, <span style="font-family: courier new,courier,sans-serif; font-size: 10pt;">python</span>, and <code>misc</code> (as in previous lab assignments). In the C and C++ folders you'll find a file named <code>header.mak</code>, for use on the CS systems to help you generate a <code>Makefile</code> that will compile and link your program with the libraries used by the framework. See the contents of <code>header.mak</code> for details on how to do this.</p>
+<h2>5. What to Submit</h2>
+<p>Your implementations will be tested with a driver program which may be different from the driver found in the framework archive.</p>
+<p>The following files must be submitted:</p>
+<blockquote>
+<table cellpadding="3">
+<tbody>
+<tr>
+<td>C:</td>
+<td>&nbsp;</td>
+<td><code>shader.vert</code> and <code>Viewing.c</code></td>
+</tr>
+<tr>
+<td>C++:</td>
+<td>&nbsp;</td>
+<td>
+<p><code>shader.vert</code> and <code>Viewing.cpp</code></p>
+</td>
+</tr>
+<tr>
+<td>python</td>
+<td></td>
+<td>
+<p><code>shader.vert</code> and <code>viewParams.py</code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>You may optionally submit a modified <code>header.mak</code> file and/or a modified <code>Viewing.h</code> file. The modified <code>header.mak</code> should be based on the version found in the ZIP archive.</p>
+<p>No other files from the distribution should be submitted.</p>
+<p>If you are using a matrix library other than the ones described in the <em>Notes</em> section (below), you may also submit those files. (If you are one of the libraries described there, please do not submit them - the 'try' scripts will include them automatically.)</p>
+<p>Files can be submitted to the mycourses dropbox labeled <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=661045&amp;type=dropbox&amp;rcode=rochester-5412797" target="_self">Assignment 5 - Transformation</a>.</p>
+<h2>6. Grading</h2>
+<p>This assignment is worth 50 points, distributed as follows:</p>
+<ul>
+<li>
+<p><em>Creates a window</em>: 5 points<br /> Your code compiles, runs, and produces a stable window.</p>
+</li>
+<li>
+<p><em>Correct object transformations</em>: 10 points</p>
+</li>
+<li>
+<p><em>Correct camera manipulation</em>: 10 points</p>
+</li>
+<li>
+<p><em>Correct frustum projection</em>: 10 points</p>
+</li>
+<li>
+<p><em>Correct orthographic projection</em>: 10 points</p>
+</li>
+<li>
+<p><em>Documentation and style</em>: 5 points</p>
+</li>
+</ul>
+<h2>7. Notes</h2>
+<p>The OpenGL and GLSL lecture notes presented in class should help you to get started on this assignment, as should the files provided with earlier OpenGL assignments.</p>
+<p>Refer back to the "Hello, OpenGL!" programming assignment for information about obtaining and installing GLUT and/or GLEW libraries.</p>
+<p>You have the choice of doing your matrix creation in either the vertex shader or in the OpenGL application itself. Doing this in the vertex shader is simpler, because GLSL provides all the necessary data types and operations to create and manipulate matrices; in the OpenGL application, you will need to either write or acquire a set of matrix manipulation routines. This ease does come with a price, though - creating and manipulating the matrices in the shader means that this will occur <em>separately</em> for every single vertex in the object being drawn, rather than just once, so doing this in the shader is less efficient. However, the objects you will be drawing in this (and later) labs are small enough that efficiency isn't really a problem, so we recommend that you create and manipulate your matrices in the shader.</p>
+<p>If you choose to do your matrix manipulation in the OpenGL application instead of in the shader, you'll need to either create your own matrix routines, or use an open-source matrix library. The following libraries are available on the CS Ubuntu systems and are freely available for installation on your own system:</p>
+<ul>
+<li>
+<p>For C++ users: the <a href="http://www.techsoftpl.com/matrix/">Matrix TCL Pro</a> library, also described in the midterm project assignment. Copies of the three header files for this library will be in the working directory when your submission is compiled; be sure to include the library using this statement:</p>
+<blockquote>
+<pre>#include "cmatrix"
+</pre>
+</blockquote>
+</li>
+<li>
+<p>Also for C++ users: the <a href="http://glm.g-truc.net/0.9.8/">OpenGL Mathematics</a> library (GLM). GLM 0.9.7.2 is installed on the CS lab machines; for greatest compatibility, you may wish to install that version on your own system.</p>
+</li>
+<li>
+<p>For C users: the <a href="http://www.gnu.org/software/gsl/">GNU Scientific Library</a> (GSL). On our systems, the header files are in the standard system include directory, so you can include the GSL matrix header file (e.g.) this way:</p>
+<blockquote>
+<pre>#include &lt;gsl/gsl_matrix.h&gt;</pre>
+</blockquote>
+<p>The most recent version offered at the <a href="http://www.gnu.org/software/gsl/">GSL web site</a> is 2.2.1.</p>
+</li>
+</ul>
+<p>If you choose to use a different matrix library than one of these, use a modified version, or have written your own matrix library, remember to submit the source code for the library along with your solution to the assignment. If the library is not one you have written, please ensure that its license allows redistribution.</p>
+<p>Regardless of whether you are doing your matrix work in GLSL or in the OpenGL application, remember that your matrices <strong>must</strong> be stored in column-major order for them to work correctly when you apply them. You can create and manipulate them that way, or you can create and manipulate them in row-major order and then transpose them before you actually use them. See the <em>transpose</em> option to the <a href="https://www.khronos.org/opengles/sdk/docs/man/xhtml/glUniform.xml"> <code>glUniformMatrix*()</code></a> function calls in OpenGL and the <a href="https://www.opengl.org/sdk/docs/man/html/transpose.xhtml"> <code>transpose()</code></a> function in GLSL for ways to do the transposition.</p>
+<p></p>
+<p></p>
+<blockquote></blockquote>
+</body>
+</html>
